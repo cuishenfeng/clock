@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<style>
+    body,div{
+        background-color: #3b4249;
+        background-image: url("bg.png");
+        background-repeat: repeat;
+        margin:0;padding:0;
+    }
+    .clock{
+        width:300px;height:300px;
+        border-radius: 50%;
+        border:6px solid #aaa;
+        background: radial-gradient(#fff,#ccc);
+        box-shadow: 0 5px 15px #000;
+        position:fixed;
+        left:0;right:0;top:0;bottom:0;
+        margin:auto;
+    }
+    .cen{
+        width:15px;height:15px;
+        border-radius: 50%;
+        background:#000;
+        z-index: 100;
+        position: absolute;
+        left:0;top:0;right:0;bottom:0;
+        margin:auto;
+    }
+</style>
+<script>
+    window.onload=function(){
+        var clock=document.querySelector(".clock");
+        createMark();
+        var times=new Date();
+        var hours=times.getHours();
+        var min=times.getMinutes();
+        var sec=times.getSeconds();
+        var h=createHand(6,70,"black",hours*30+min*6/12);
+        var m=createHand(4,90,"black",min*6);
+        var s=createHand(2,120,"red",sec*6);
+        setInterval(function(){
+            var times=new Date();
+            var hours=times.getHours();
+            var min=times.getMinutes();
+            var sec=times.getSeconds();
+            h.style.transform="rotate("+(hours*30+min*6/12)+"deg)";
+            m.style.transform="rotate("+min*6+"deg)";
+            s.style.transform="rotate("+sec*6+"deg)";
+        },1000)
+        /*表盘*/
+        function createMark(){
+            var widths,heights;
+            for(var i=0;i<60;i++){
+                if(i%5==0){
+                    widths=4;
+                    heights=10;
+                }else{
+                    widths=2;
+                    heights=6;
+                }
+                var kedu=document.createElement("div");
+                kedu.style.cssText="width:"+widths+"px;height:"+heights+"px;background:#000;position: absolute;left:"+(300-widths)/2+"px;top:0;";
+                kedu.style.transformOrigin="center 150px";
+                kedu.style.transform="rotate("+i*6+"deg)";
+                clock.appendChild(kedu);
+            }
+        }
+        /*时针、分针、秒针*/
+        function createHand(w,h,c,a){
+            var div=document.createElement("div");
+            var lefts=(300-w)/2;
+            var tops=300/2-h;
+            div.style.cssText="width:"+w+"px;height:"+h+"px;background:"+c+";position:absolute;left:"+lefts+"px;top:"+tops+"px";
+            div.style.transformOrigin="center bottom";
+            div.style.transform="("+a+"deg)";
+            clock.appendChild(div);
+            return div;
+        }
+
+    }
+</script>
+<body>
+<div class="clock">
+    <div class="cen"></div>
+</div>
+</body>
+</html>
